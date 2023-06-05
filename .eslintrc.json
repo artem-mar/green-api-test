@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "airbnb",
+    "airbnb-typescript",
+    "react-app",
+    "react-app/jest"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "react/function-component-definition": [2, { "namedComponents": "arrow-function" }],
+    "react/jsx-one-expression-per-line": 0,
+    "react/jsx-props-no-spreading": 0
+  }
+}
