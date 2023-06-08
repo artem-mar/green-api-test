@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import cn from 'classnames';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styles from './LoginForm.module.scss';
 import { useAuth } from '../../hooks';
+import routes from '../../routes';
 
 type Inputs = {
   apiToken: string;
@@ -24,9 +24,8 @@ const LoginForm = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async ({ apiToken, idInstance }) => {
-    const host = 'https://api.green-api.com';
     try {
-      const { data } = await axios.get(`${host}/waInstance${idInstance.trim()}/getStateInstance/${apiToken.trim()}`);
+      const { data } = await axios.get(routes.getStateInstance(idInstance.trim(), apiToken.trim()));
       if (data.stateInstance === 'authorized') {
         logIn(idInstance, apiToken);
         navigate('/');
