@@ -1,0 +1,25 @@
+.item {
+  height: 3rem;
+  border: none;
+  border-bottom: 1px solid #b9b9b9;
+  display: block;
+  width: 100%;
+  background: #fff;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  padding-left: 2rem;
+  padding-right: 1rem;
+
+  &:hover {
+    background-color: #d9fdd3;
+  }
+}
+
+.selected {
+  background-color: #66da69;
+
+  &:hover {
+    background-color: #66da69;
+  }
+}
