@@ -1,0 +1,15 @@
+.chatList {
+  height: calc(100vh - 6rem);
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 2px;
+  }
+ 
+  &::-webkit-scrollbar-track-piece {
+      background: #fff
+  }
+  &::-webkit-scrollbar-thumb {
+      background: #888
+  }
+}
