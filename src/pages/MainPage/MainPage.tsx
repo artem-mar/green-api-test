@@ -45,7 +45,6 @@ const MainPage = () => {
 
   const gettingNotifications = useRef(true);
   const subscribeToNotifications = useCallback(async () => {
-    gettingNotifications.current = true;
     try {
       while (gettingNotifications.current) {
         const response = await axios.get(routes.receiveNotification(instanceId, apiToken));
