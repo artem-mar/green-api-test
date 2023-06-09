@@ -11,16 +11,19 @@ import ChatListItem from '../ChatListItem';
 const ChatList = () => {
   const { apiToken, instanceId } = useAuth();
   const dispatch = useAppDispatch();
-  const chatSelectors = chatsAdapter.getSelectors<RootState>((state) => state.chats);
-  const chatItems = useAppSelector(chatSelectors.selectAll) as Chat[];
+  const chats = useAppSelector((state) => state.chats.chats);
 
   useEffect(() => {
     const getChats = async () => {
       try {
         const { data }: { data: Chat[] } = await axios.get(routes.getChats(instanceId, apiToken));
-        const chats: Chat[] = data.map((c) => (c.name ? { id: c.id, name: c.name } : { id: c.id }));
+        const fetchedChats: Chat[] = data.map(
+          (c) => (c.name ? { id: c.id, name: c.name } : { id: c.id }),
+        );
+        const chatIds = chats.map((ch) => ch.id);
+        const uniqueChats = fetchedChats.filter((c) => !chatIds.includes(c.id));
 
-        dispatch(addChats(chats));
+        dispatch(addChats(uniqueChats));
       } catch (e) {
         console.log(e);
       }
@@ -30,14 +33,14 @@ const ChatList = () => {
   }, [dispatch, apiToken, instanceId]);
 
   return (
-    <div className={s.panel}>
+    <>
       <AddChatForm />
       <div className={s.chatList}>
-        {chatItems.map((item) => (
+        {chats.map((item) => (
           <ChatListItem key={item.id} id={item.id} name={item.name} />
         ))}
       </div>
-    </div>
+    </>
   );
 };
 
