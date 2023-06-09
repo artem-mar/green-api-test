@@ -6,21 +6,27 @@ export type Chat = {
   'name'?: string;
 };
 
+type State = {
+  currentChatId: string | null;
+  chats: Chat[];
+};
+
 export const chatsAdapter = createEntityAdapter();
-// const initialState: Chat[] = [];
+const initialState: State = {
+  currentChatId: null,
+  chats: [],
+};
 
 const chatsSlice = createSlice({
   name: 'chats',
-  initialState: chatsAdapter.getInitialState({ currentChatId: '' }),
+  initialState,
   reducers: {
-    // addChats: (state, action: PayloadAction<Chat[]>) => {
-    //   state.push(...action.payload);
-    // },
-    // addChat: (state, action: PayloadAction<Chat>) => {
-    //   state = [...state, action.payload];
-    // },
-    addChat: chatsAdapter.addOne,
-    addChats: chatsAdapter.addMany,
+    addChats: (state, action: PayloadAction<Chat[]>) => {
+      state.chats = [...action.payload, ...state.chats];
+    },
+    addChat: (state, action: PayloadAction<Chat>) => {
+      state.chats = [action.payload, ...state.chats];
+    },
     setCurrentChat: (state, action: PayloadAction<string>) => {
       state.currentChatId = action.payload;
     },
