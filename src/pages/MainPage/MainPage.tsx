@@ -1,10 +1,12 @@
 /* eslint-disable no-await-in-loop */
 import React, { useCallback, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useAuth } from '../../hooks';
+import { useAppDispatch, useAuth } from '../../hooks';
 import ChatList from '../../components/ChatList';
 import routes from '../../routes';
 import s from './MainPage.module.scss';
+import ChatBox from '../../components/ChatBox';
+import { Message, addMessage } from '../../app/messagesSlice';
 
 type NotificationBody = {
   typeWebhook: string;
@@ -23,8 +25,11 @@ type NotificationBody = {
   };
   messageData: {
     typeMessage: string;
-    textMessageData: {
+    textMessageData?: {
       textMessage: string;
+    };
+    extendedTextMessageData?: {
+      text: string;
     };
   };
 };
@@ -35,7 +40,8 @@ type Notification = {
 };
 
 const MainPage = () => {
-  const { logOut, instanceId, apiToken } = useAuth();
+  const { instanceId, apiToken } = useAuth();
+  const dispatch = useAppDispatch();
 
   const gettingNotifications = useRef(true);
   const subscribeToNotifications = useCallback(async () => {
@@ -43,13 +49,25 @@ const MainPage = () => {
     try {
       while (gettingNotifications.current) {
         const response = await axios.get(routes.receiveNotification(instanceId, apiToken));
-        const notification: Notification | null = response.data;
-        if (notification) {
-          // добавить с стейт редакса
-          await axios.delete(
-            routes.deleteNotification(instanceId, apiToken, notification.receiptId),
-          );
+        const notification: Notification = response.data;
+        // добавляем в стейт только текстовые сообщения
+        if (notification && notification.body.messageData.typeMessage.toLowerCase().includes('text')) {
+          const { body } = notification;
+          const message: Message = {
+            type: body.typeWebhook,
+            idMessage: body.idMessage,
+            chatId: body.senderData.chatId,
+            textMessage:
+              body.messageData.textMessageData?.textMessage
+              || body.messageData.extendedTextMessageData?.text,
+            typeMessage: body.messageData.typeMessage,
+          };
+          dispatch(addMessage(message));
         }
+        // удаляем уведомления любого типа
+        notification && await axios.delete(
+          routes.deleteNotification(instanceId, apiToken, notification.receiptId),
+        );
       }
     } catch (ex) {
       console.error(ex);
@@ -74,9 +92,7 @@ const MainPage = () => {
         <ChatList />
       </div>
       <div className={s.gridRight}>
-        <button className="btn" type="button" onClick={logOut}>
-          logOut
-        </button>
+        <ChatBox />
       </div>
     </div>
   );
