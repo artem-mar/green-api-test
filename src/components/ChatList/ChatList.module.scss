@@ -1,15 +1,18 @@
 .chatList {
   height: calc(100vh - 6rem);
   overflow-y: scroll;
+  background-color: #f0f2f5;
+  border-right: 1px solid #bdbdbd;
 
   &::-webkit-scrollbar {
-    width: 2px;
+    width: 3px;
+    background-color: #f0f2f5;
   }
  
   &::-webkit-scrollbar-track-piece {
-      background: #fff
+      background: #f0f2f5;
   }
   &::-webkit-scrollbar-thumb {
-      background: #888
+      background: #888;
   }
 }
