@@ -6,7 +6,7 @@ import MessagesBox from '../MessagesBox';
 
 const ChatBox = () => {
   const currentChatId = useAppSelector((state) => state.chats.currentChatId);
-  const currentChat = useAppSelector((state) => state.chats.chats)
+  const currentChat = useAppSelector((state) => state.chats.entities)
     .find((el) => el.id === currentChatId);
   const headerString = currentChat?.name ? currentChat.name : currentChatId;
 

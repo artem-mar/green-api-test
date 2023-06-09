@@ -11,7 +11,7 @@ import ChatListItem from '../ChatListItem';
 const ChatList = () => {
   const { apiToken, instanceId } = useAuth();
   const dispatch = useAppDispatch();
-  const chats = useAppSelector((state) => state.chats.chats);
+  const chats = useAppSelector((state) => state.chats.entities);
 
   useEffect(() => {
     const getChats = async () => {

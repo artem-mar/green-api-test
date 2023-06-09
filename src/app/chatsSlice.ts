@@ -8,13 +8,15 @@ export type Chat = {
 
 type State = {
   currentChatId: string | null;
-  chats: Chat[];
+  entities: Chat[];
+  ids: string[];
 };
 
 export const chatsAdapter = createEntityAdapter();
 const initialState: State = {
   currentChatId: null,
-  chats: [],
+  entities: [],
+  ids: [],
 };
 
 const chatsSlice = createSlice({
@@ -22,10 +24,12 @@ const chatsSlice = createSlice({
   initialState,
   reducers: {
     addChats: (state, action: PayloadAction<Chat[]>) => {
-      state.chats = [...action.payload, ...state.chats];
+      state.entities = [...action.payload, ...state.entities];
+      state.ids = [...action.payload.map((ch) => ch.id), ...state.ids];
     },
     addChat: (state, action: PayloadAction<Chat>) => {
-      state.chats = [action.payload, ...state.chats];
+      state.entities = [action.payload, ...state.entities];
+      state.ids = [action.payload.id, ...state.ids];
     },
     setCurrentChat: (state, action: PayloadAction<string>) => {
       state.currentChatId = action.payload;
