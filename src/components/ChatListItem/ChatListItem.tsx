@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import cn from 'classnames';
 import s from './ChatListItem.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -17,13 +17,19 @@ const ChatItem = ({ id, name }: Props) => {
     [s.selected]: currentChatId === id,
   });
 
+  const btnRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    currentChatId === id && btnRef.current?.scrollIntoView();
+  });
+
   const handleClick = () => {
     dispatch(setCurrentChat(id));
   };
 
   return (
-    <button onClick={handleClick} type="button" className={classes}>
-      {name && name}
+    <button ref={btnRef} onClick={handleClick} type="button" className={classes}>
+      {name}
       {!name && `+${id.split('@').shift()}`}
     </button>
   );
