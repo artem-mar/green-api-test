@@ -7,9 +7,9 @@ const Header = () => {
 
   return (
     <div className={styles.nav}>
-      <button className={styles.btn} type="button" onClick={() => navigate('/')}>
-        <span className={styles.header}>Не ВатсАпп</span>
-      </button>
+      <div className={styles.logo}>
+        <span className={styles.header}>not WhatsApp</span>
+      </div>
     </div>
   );
 };
