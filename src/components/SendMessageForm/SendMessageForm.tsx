@@ -47,7 +47,7 @@ const SendMessageForm = () => {
       />
 
       <button disabled={isSubmitting || !currentChatId} className={s.btn} type="submit">
-        &#10148;
+        &#129122;
       </button>
     </form>
   );

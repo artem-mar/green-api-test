@@ -24,7 +24,9 @@ const ChatItem = ({ id, name }: Props) => {
   });
 
   const handleClick = () => {
-    dispatch(setCurrentChat(id));
+    if (currentChatId !== id) {
+      dispatch(setCurrentChat(id));
+    }
   };
 
   return (

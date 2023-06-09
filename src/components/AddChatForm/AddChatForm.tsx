@@ -2,7 +2,7 @@ import React from 'react';
 import InputMask from 'react-input-mask';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import s from './AddChatForm.module.scss';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { addChat, setCurrentChat } from '../../app/chatsSlice';
 
 type Input = { phone: string };
@@ -12,18 +12,23 @@ const AddChatForm = () => {
 
   const { reset, handleSubmit, register } = useForm<Input>();
 
+  const { ids, currentChatId } = useAppSelector((state) => state.chats);
+
   const onSubmit: SubmitHandler<Input> = async ({ phone }) => {
     const phoneNumber = phone.replace(/[^0-9]/g, '');
 
     if (phoneNumber.length === 11) {
       const chatId = `${phoneNumber}@c.us`;
-      dispatch(addChat({ id: chatId }));
-      dispatch(setCurrentChat(chatId));
+      if (!ids.includes(chatId)) {
+        dispatch(addChat({ id: chatId }));
+      }
+      if (currentChatId !== chatId) {
+        dispatch(setCurrentChat(chatId));
+      }
       reset({ phone: '' });
     }
   };
 
-  console.log();
   return (
     <div className={s.container}>
       <form
